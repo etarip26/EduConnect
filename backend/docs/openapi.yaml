@@ -1,0 +1,80 @@
+openapi: 3.0.3
+info:
+  title: EduConnect API
+  version: 1.0.0
+  description: API documentation for EduConnect backend. Includes Nearby Tuition Posts endpoint.
+servers:
+  - url: http://localhost:5000
+paths:
+  /api/tuition-posts/nearby:
+    get:
+      summary: Find nearby tuition posts
+      description: |
+        Returns tuition posts ordered by proximity to the provided point. Supports server-side distance computation (via `withDistance=true`) which returns `distance_km` on each document.
+      parameters:
+        - in: query
+          name: lat
+          schema:
+            type: number
+            format: float
+          required: true
+          description: Latitude of center point (decimal degrees)
+        - in: query
+          name: lng
+          schema:
+            type: number
+            format: float
+          required: true
+          description: Longitude of center point (decimal degrees)
+        - in: query
+          name: radiusKm
+          schema:
+            type: number
+            format: float
+            default: 10
+          required: false
+          description: Radius in kilometers (max capped on server)
+        - in: query
+          name: withDistance
+          schema:
+            type: boolean
+          required: false
+          description: If true, server returns computed distances (meters) as `dist.calculated` and also `distance_km` for convenience (requires aggregation `$geoNear`).
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          required: false
+          description: Page number (1-based)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+          required: false
+          description: Results per page (max enforced server-side)
+      responses:
+        '200':
+          description: A list of nearby tuition posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      description: Tuition post document (may include `distance_km` when `withDistance=true`)
+                  page:
+                    type: integer
+                    description: Page number (when paginated)
+                  perPage:
+                    type: integer
+                    description: Results per page
+        '400':
+          description: Bad request (missing/invalid parameters)
+        '500':
+          description: Server error
+components: {}

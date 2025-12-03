@@ -1,0 +1,137 @@
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+pubspec.lock
+build/
+.gradle/
+local.properties
+*.iml
+*.lock
+GeneratedPluginRegistrant.java
+GeneratedPlugins.java
+
+# iOS
+ios/Flutter/Flutter.podspec
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.modulemap
+ios/Flutter/generatePluginRegistrant.sh
+ios/Flutter/ephemeralmodules
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/Flutter/flutter_export_environment.sh
+ios/.symlinks/
+ios/Pods/
+ios/.generated.xcode.build_settings.json
+ios/Runner/GeneratedPluginRegistrant.*
+ios/Runner.xcarchive
+ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# Android
+android/local.properties
+android/gradle.properties
+android/.gradle/
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/gradle/
+android/app/debug
+android/app/profile
+android/app/release
+android/.idea/
+android/*.iml
+android/*.keystore
+android/*.jks
+android/key.properties
+
+# macOS
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/Flutter-Debug.xcconfig
+macos/Flutter/Flutter-Release.xcconfig
+macos/Flutter/Flutter-Profile.xcconfig
+macos/Podfile.lock
+macos/Pods/
+macos/.symlinks/
+macos/Flutter/ephemeralmodules
+macos/Flutter/flutter_export_environment.sh
+macos/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+macos/Runner.xcarchive
+
+# Linux
+linux/flutter/generated_plugins.cmake
+linux/flutter/generated_plugin_target.cmake
+linux/flutter/generated_plugins_platform_interface.cmake
+linux/flutter/ephemeralmodules
+
+# Windows
+windows/flutter/generated_plugins.cmake
+windows/flutter/generated_plugin_target.cmake
+windows/flutter/generated_plugins_platform_interface.cmake
+windows/flutter/ephemeralmodules
+
+# Web
+web/app.js
+web/app_unsafe.js
+web/index.html.js.deps.json
+web/index.html.js.map
+
+# Node.js / Backend
+node_modules/
+dist/
+coverage/
+.nyc_output/
+npm-cache/
+*.tgz
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.history
+.jshintrc
+
+# Logs
+*.log
+npm-debug.log*
+npm-error.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+.tmp/
+
+# Build artifacts
+.next/
+out/
+
+# Misc
+.firebase/
+.firebaserc
+
