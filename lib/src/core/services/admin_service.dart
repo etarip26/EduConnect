@@ -1,10 +1,15 @@
+import 'package:get_it/get_it.dart';
 import 'package:test_app/src/config/api_paths.dart';
 import 'package:test_app/src/core/network/api_client.dart';
+import 'package:test_app/src/core/services/auth_service.dart';
 
 class AdminService {
   final ApiClient api;
+  late final AuthService _authService;
 
-  AdminService(this.api);
+  AdminService(this.api) {
+    _authService = GetIt.I<AuthService>();
+  }
 
   // ---------------------------------------------------------
   // GET ADMIN STATS
@@ -113,5 +118,89 @@ class AdminService {
   // ---------------------------------------------------------
   Future<void> updateDemo(String sessionId, String status) async {
     await api.patch(ApiPaths.adminUpdateDemo(sessionId), {"status": status});
+  }
+
+  // ---------------------------------------------------------
+  // ROLE-BASED VERIFICATION METHODS
+  // ---------------------------------------------------------
+
+  /// Check if current user is an admin
+  bool isAdmin() {
+    return _authService.user?.role == 'admin';
+  }
+
+  /// Check if current user has specific role
+  bool hasRole(String role) {
+    return _authService.user?.role == role;
+  }
+
+  /// Get current user role
+  String? getUserRole() {
+    return _authService.user?.role;
+  }
+
+  /// Check if user is admin or teacher
+  bool isAdminOrTeacher() {
+    final role = _authService.user?.role;
+    return role == 'admin' || role == 'teacher';
+  }
+
+  /// Check if user is admin or student
+  bool isAdminOrStudent() {
+    final role = _authService.user?.role;
+    return role == 'admin' || role == 'student';
+  }
+
+  /// Create new admin (admin only)
+  Future<Map<String, dynamic>> createAdmin({
+    required String email,
+    required String tempPassword,
+    String? name,
+    String? phone,
+  }) async {
+    final res = await api.post('/api/admin/users/admin/create', {
+      'email': email,
+      'tempPassword': tempPassword,
+      'name': name,
+      'phone': phone,
+    });
+    return res;
+  }
+
+  /// Update user role (admin only)
+  Future<Map<String, dynamic>> updateUserRole(
+    String userId,
+    String role,
+  ) async {
+    final res = await api.patch('/api/admin/users/$userId/role', {
+      'role': role,
+    });
+    return res;
+  }
+
+  /// List users with filtering and pagination
+  Future<Map<String, dynamic>> listUsers({
+    String? role,
+    String? status,
+    int page = 1,
+    int limit = 20,
+    String? search,
+  }) async {
+    final queryParams = <String, String>{
+      'page': page.toString(),
+      'limit': limit.toString(),
+    };
+    if (role != null) queryParams['role'] = role;
+    if (status != null) queryParams['status'] = status;
+    if (search != null) queryParams['search'] = search;
+
+    final res = await api.get('/api/admin/users', query: queryParams);
+    return res;
+  }
+
+  /// Get enhanced dashboard statistics
+  Future<Map<String, dynamic>> getDashboardStats() async {
+    final res = await api.get('/api/admin/dashboard/stats');
+    return res['data'] ?? res;
   }
 }
