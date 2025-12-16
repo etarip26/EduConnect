@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:test_app/src/core/services/auth_service.dart';
 import 'package:test_app/src/core/widgets/app_avatar.dart';
+import 'package:test_app/src/ui/notifications/notifications_page.dart';
 
 class AppSidebar extends StatelessWidget {
   final int currentIndex;
@@ -216,11 +217,10 @@ class AppSidebar extends StatelessWidget {
     } else if (index == -2) {
       // Notifications
       Navigator.pop(context);
-      Future.delayed(const Duration(milliseconds: 200), () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Notifications feature coming soon')),
-        );
-      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const NotificationsPage()),
+      );
     } else if (index == -3) {
       // Reviews & Ratings
       Navigator.pop(context);
