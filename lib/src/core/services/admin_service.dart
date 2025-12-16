@@ -65,11 +65,20 @@ class AdminService {
   }
 
   // ---------------------------------------------------------
-  // APPROVE TUITION APPLICATION
+  // APPROVE/REJECT TUITION APPLICATION
   // PATCH /api/admin/applications/:id/approve
+  // body: { action: 'approve'|'reject', notes?: string }
   // ---------------------------------------------------------
-  Future<void> approveApplication(String appId) async {
-    await api.patch(ApiPaths.adminApplicationApprove(appId), {});
+  Future<void> approveApplication(
+    String appId, {
+    String action = 'approve',
+    String? notes,
+  }) async {
+    final body = {'action': action};
+    if (notes != null && notes.isNotEmpty) {
+      body['notes'] = notes;
+    }
+    await api.patch(ApiPaths.adminApplicationApprove(appId), body);
   }
 
   // ---------------------------------------------------------
