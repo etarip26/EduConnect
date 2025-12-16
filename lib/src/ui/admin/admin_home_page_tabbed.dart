@@ -1051,24 +1051,43 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                         "${t["location"]?["city"] ?? "Location TBD"}, Class ${t["classLevel"] ?? "Unknown"}",
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
+                      Text(
+                        "Salary: ${t["salaryMin"] ?? "N/A"} - ${t["salaryMax"] ?? "N/A"} BDT",
+                        style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                      ),
                     ],
                   ),
                 ),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    try {
-                      await admin.approveTuition(t["_id"]);
-                      loadData();
-                      showSnackBar(context, "Tuition approved successfully");
-                    } catch (e) {
-                      showSnackBar(context, "Error: $e", isError: true);
-                    }
-                  },
-                  icon: const Icon(Icons.check_circle),
-                  label: const Text("Approve"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8,
+                  children: [
+                    OutlinedButton.icon(
+                      onPressed: () => _showTuitionDetailsDialog(context, t),
+                      icon: const Icon(Icons.info, size: 18),
+                      label: const Text("Details"),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        try {
+                          await admin.approveTuition(t["_id"]);
+                          loadData();
+                          showSnackBar(context, "Tuition approved successfully");
+                        } catch (e) {
+                          showSnackBar(context, "Error: $e", isError: true);
+                        }
+                      },
+                      icon: const Icon(Icons.check_circle, size: 18),
+                      label: const Text("Approve"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -1077,6 +1096,7 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
       ),
     );
   }
+
 
   Widget _applicationsApprovalsCard() {
     return Container(
@@ -1553,6 +1573,174 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
           ),
         ),
       ],
+    );
+  }
+
+  // Show tuition details dialog with student profile
+  void _showTuitionDetailsDialog(BuildContext context, Map<String, dynamic> tuition) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Tuition Details"),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Student Section
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.indigo.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.indigo.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.indigo,
+                          child: Text(
+                            _getInitial(tuition['studentId']?['name'] ?? 'S'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                tuition['studentId']?['name'] ?? 'Unknown Student',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Text(
+                                tuition['studentId']?['email'] ?? 'No email',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    if (tuition['studentId']?['phone'] != null)
+                      Text(
+                        "Phone: ${tuition['studentId']?['phone'] ?? 'N/A'}",
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Tuition Details Section
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.amber.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      tuition['title'] ?? 'Unknown Tuition',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.amber.shade900,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Class: ${tuition['classLevel'] ?? 'N/A'}",
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      "Subject: ${tuition['subject'] ?? 'N/A'}",
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      "Location: ${tuition['location']?['area'] ?? 'N/A'}, ${tuition['location']?['city'] ?? 'N/A'}",
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      "Salary: ${tuition['salaryMin'] ?? 'N/A'} - ${tuition['salaryMax'] ?? 'N/A'} BDT",
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Description Section
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Description",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      tuition['details'] ?? 'No description provided',
+                      style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text("Close"),
+          ),
+          ElevatedButton.icon(
+            onPressed: () async {
+              try {
+                await admin.approveTuition(tuition['_id']);
+                Navigator.of(ctx).pop();
+                loadData();
+                showSnackBar(context, "Tuition approved successfully");
+              } catch (e) {
+                showSnackBar(context, "Error: $e", isError: true);
+              }
+            },
+            icon: const Icon(Icons.check_circle),
+            label: const Text("Approve"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
