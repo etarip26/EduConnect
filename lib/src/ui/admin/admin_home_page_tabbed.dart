@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:test_app/src/core/services/admin_service.dart';
 import 'package:test_app/src/core/services/auth_service.dart';
 import 'package:test_app/src/core/utils/snackbar_utils.dart';
+import 'package:test_app/src/ui/notifications/notification_badge.dart';
 
 class AdminHomePageTabbed extends StatefulWidget {
   const AdminHomePageTabbed({super.key});
@@ -164,6 +165,7 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
             ),
           ),
         ),
+        const NotificationBadge(),
         PopupMenuButton<String>(
           itemBuilder: (_) => <PopupMenuEntry<String>>[
             PopupMenuItem<String>(

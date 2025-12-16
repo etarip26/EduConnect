@@ -97,6 +97,16 @@ const approveTuition = async (req, res) => {
     tuition.status = "approved";
     await tuition.save();
 
+    // Create notification for student
+    await Notification.create({
+      userId: tuition.studentId,
+      title: "Tuition Post Approved",
+      message: `Your tuition post "${tuition.title}" has been approved and is now visible to teachers.`,
+      type: "tuition_approved",
+      relatedId: tuition._id,
+      isRead: false
+    });
+
     res.json({ message: "Tuition approved", tuition });
   } catch (err) {
     console.error("approveTuition error:", err);
@@ -759,25 +769,61 @@ const approveTuitionApplication = async (req, res) => {
         .json({ success: false, message: "Post not found" });
     }
 
-    // Create a match
-    const match = await Match.create({
-      tuitionId: post._id,
-      studentId: post.studentId,
-      teacherId: application.teacherId,
-      status: "active",
-      isChatAllowed: true,
-      isDemoAllowed: true
-    });
+    // Create notification for teacher about application decision
+    if (action === "approve") {
+      // Create a match
+      const match = await Match.create({
+        tuitionId: post._id,
+        studentId: post.studentId,
+        teacherId: application.teacherId,
+        status: "active",
+        isChatAllowed: true,
+        isDemoAllowed: true
+      });
 
-    logger.info(
-      `Application approved and match created: ${appId} by admin: ${req.user.email}`
-    );
+      // Notify teacher of approval
+      await Notification.create({
+        userId: application.teacherId,
+        title: "Application Approved",
+        message: `Your application for "${post.title}" has been approved! You can now connect with the student.`,
+        type: "application_approved",
+        relatedId: application._id,
+        isRead: false
+      });
 
-    res.status(200).json({
-      success: true,
-      message: "Application approved and match created",
-      match
-    });
+      logger.info(
+        `Application approved and match created: ${appId} by admin: ${req.user.email}`
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Application approved and match created",
+        match
+      });
+    } else {
+      // Notify teacher of rejection
+      const rejectionMessage = notes
+        ? `Your application for "${post.title}" was not approved. ${notes}`
+        : `Your application for "${post.title}" was not approved.`;
+
+      await Notification.create({
+        userId: application.teacherId,
+        title: "Application Not Approved",
+        message: rejectionMessage,
+        type: "application_rejected",
+        relatedId: application._id,
+        isRead: false
+      });
+
+      logger.info(
+        `Application rejected: ${appId} by admin: ${req.user.email}`
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Application rejected"
+      });
+    }
   } catch (error) {
     logger.error("Error approving application:", error.message);
     res

@@ -154,9 +154,7 @@ class ChatService {
 
   /// Fallback: Send message via REST API
   Future<Map<String, dynamic>> sendMessage(String roomId, String text) async {
-    final res = await api.post(ApiPaths.chatMessages(roomId), {
-      "text": text,
-    });
+    final res = await api.post(ApiPaths.chatMessages(roomId), {"text": text});
     return res["data"] ?? {};
   }
 

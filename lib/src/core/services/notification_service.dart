@@ -6,14 +6,31 @@ class NotificationService {
 
   NotificationService({required this.apiClient});
 
-  Future<List<Map<String, dynamic>>> getMyNotifications() async {
-    final res = await apiClient.get(ApiPaths.myNotifications);
-    final list = res['notifications'] ?? res['data'];
-    if (list is List) {
-      return List<Map<String, dynamic>>.from(
-        list.map((e) => Map<String, dynamic>.from(e as Map)),
-      );
-    }
-    return [];
+  Future<Map<String, dynamic>> getMyNotifications({
+    int page = 1,
+    int limit = 20,
+  }) async {
+    final res = await apiClient.get(
+      '${ApiPaths.myNotifications}?page=$page&limit=$limit',
+    );
+    return {
+      'notifications': res['notifications'] ?? res['data'] ?? [],
+      'unreadCount': res['unreadCount'] ?? 0,
+      'totalCount': res['totalCount'] ?? 0,
+      'page': res['page'] ?? page,
+      'limit': res['limit'] ?? limit,
+    };
   }
-}
+
+  Future<Map<String, dynamic>> markNotificationAsRead(String notificationId) async {
+    final res = await apiClient.patch(
+      '${ApiPaths.baseUrl}/notifications/$notificationId/read',
+      data: {},
+    );
+    return res;
+  }
+
+  Future<void> deleteNotification(String notificationId) async {
+    await apiClient.delete(
+      '${ApiPaths.baseUrl}/notifications/$notificationId',
+    );
