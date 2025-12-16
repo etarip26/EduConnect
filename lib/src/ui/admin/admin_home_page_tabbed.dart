@@ -1055,7 +1055,10 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                       ),
                       Text(
                         "Salary: ${t["salaryMin"] ?? "N/A"} - ${t["salaryMax"] ?? "N/A"} BDT",
-                        style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ],
                   ),
@@ -1069,7 +1072,10 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                       icon: const Icon(Icons.info, size: 18),
                       label: const Text("Details"),
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                       ),
                     ),
                     ElevatedButton.icon(
@@ -1077,7 +1083,10 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                         try {
                           await admin.approveTuition(t["_id"]);
                           loadData();
-                          showSnackBar(context, "Tuition approved successfully");
+                          showSnackBar(
+                            context,
+                            "Tuition approved successfully",
+                          );
                         } catch (e) {
                           showSnackBar(context, "Error: $e", isError: true);
                         }
@@ -1086,7 +1095,10 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                       label: const Text("Approve"),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                       ),
                     ),
                   ],
@@ -1098,7 +1110,6 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
       ),
     );
   }
-
 
   Widget _applicationsApprovalsCard() {
     return Container(
@@ -1579,7 +1590,10 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
   }
 
   // Show tuition details dialog with student profile
-  void _showTuitionDetailsDialog(BuildContext context, Map<String, dynamic> tuition) {
+  void _showTuitionDetailsDialog(
+    BuildContext context,
+    Map<String, dynamic> tuition,
+  ) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -1620,7 +1634,8 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                tuition['studentId']?['name'] ?? 'Unknown Student',
+                                tuition['studentId']?['name'] ??
+                                    'Unknown Student',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
@@ -1683,7 +1698,10 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                     ),
                     Text(
                       "Salary: ${tuition['salaryMin'] ?? 'N/A'} - ${tuition['salaryMax'] ?? 'N/A'} BDT",
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -1711,7 +1729,10 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                     const SizedBox(height: 8),
                     Text(
                       tuition['details'] ?? 'No description provided',
-                      style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade700,
+                      ),
                     ),
                   ],
                 ),
@@ -1737,9 +1758,7 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
             },
             icon: const Icon(Icons.check_circle),
             label: const Text("Approve"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
           ),
         ],
       ),

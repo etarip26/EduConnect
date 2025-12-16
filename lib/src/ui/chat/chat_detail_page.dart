@@ -248,7 +248,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Widget _buildBubble(dynamic msg) {
     final mine = isMine(msg);
     final status = msg["status"] ?? "";
-    final senderName = msg["senderId"] is Map 
+    final senderName = msg["senderId"] is Map
         ? msg["senderId"]["name"] ?? "Unknown"
         : "Unknown";
 

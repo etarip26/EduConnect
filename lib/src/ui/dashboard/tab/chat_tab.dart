@@ -50,8 +50,12 @@ class _ChatTabState extends State<ChatTab> {
       itemCount: rooms.length,
       itemBuilder: (_, i) {
         final r = rooms[i];
-        final studentId = r["studentId"] is Map ? r["studentId"]["_id"] : r["studentId"];
-        final teacherId = r["teacherId"] is Map ? r["teacherId"]["_id"] : r["teacherId"];
+        final studentId = r["studentId"] is Map
+            ? r["studentId"]["_id"]
+            : r["studentId"];
+        final teacherId = r["teacherId"] is Map
+            ? r["teacherId"]["_id"]
+            : r["teacherId"];
         final auth = GetIt.instance<AuthService>();
         final currentUserId = auth.user?.id;
 
@@ -60,13 +64,13 @@ class _ChatTabState extends State<ChatTab> {
 
         // Get partner's name - try different places
         String partnerName = "Chat Partner";
-        
+
         // First, try to get from populated user data
         if (isStudent && r["teacherId"] is Map) {
           partnerName = r["teacherId"]["name"] ?? "Teacher";
         } else if (!isStudent && r["studentId"] is Map) {
           partnerName = r["studentId"]["name"] ?? "Student";
-        } 
+        }
         // Then try from matchId
         else if (r["matchId"] is Map) {
           partnerName = isStudent

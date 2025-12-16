@@ -7,11 +7,8 @@ class NotificationBadge extends StatefulWidget {
   final double size;
   final bool autoRefresh;
 
-  const NotificationBadge({
-    Key? key,
-    this.size = 32,
-    this.autoRefresh = true,
-  }) : super(key: key);
+  const NotificationBadge({Key? key, this.size = 32, this.autoRefresh = true})
+    : super(key: key);
 
   @override
   State<NotificationBadge> createState() => _NotificationBadgeState();
@@ -37,7 +34,10 @@ class _NotificationBadgeState extends State<NotificationBadge> {
 
   Future<void> _loadUnreadCount() async {
     try {
-      final result = await _notificationService.getMyNotifications(page: 1, limit: 1);
+      final result = await _notificationService.getMyNotifications(
+        page: 1,
+        limit: 1,
+      );
       if (mounted) {
         setState(() {
           _unreadCount = result['unreadCount'] ?? 0;
@@ -56,9 +56,11 @@ class _NotificationBadgeState extends State<NotificationBadge> {
           icon: Icon(Icons.notifications_outlined),
           iconSize: widget.size - 4,
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const NotificationsPage()),
-            ).then((_) => _loadUnreadCount());
+            Navigator.of(context)
+                .push(
+                  MaterialPageRoute(builder: (_) => const NotificationsPage()),
+                )
+                .then((_) => _loadUnreadCount());
           },
         ),
         if (_unreadCount > 0)
@@ -71,10 +73,7 @@ class _NotificationBadgeState extends State<NotificationBadge> {
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(10),
               ),
-              constraints: const BoxConstraints(
-                minWidth: 20,
-                minHeight: 20,
-              ),
+              constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
               child: Text(
                 _unreadCount > 99 ? '99+' : _unreadCount.toString(),
                 style: const TextStyle(

@@ -22,7 +22,9 @@ class NotificationService {
     };
   }
 
-  Future<Map<String, dynamic>> markNotificationAsRead(String notificationId) async {
+  Future<Map<String, dynamic>> markNotificationAsRead(
+    String notificationId,
+  ) async {
     final res = await apiClient.patch(
       '${ApiPaths.myNotifications}/$notificationId/read',
       {},
