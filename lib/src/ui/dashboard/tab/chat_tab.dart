@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:test_app/src/core/services/chat_service.dart';
+import 'package:test_app/src/core/services/auth_service.dart';
 import 'package:test_app/src/ui/chat/chat_room_page.dart';
 import 'package:test_app/src/core/widgets/app_avatar.dart';
 
@@ -51,7 +52,8 @@ class _ChatTabState extends State<ChatTab> {
         final r = rooms[i];
         final studentId = r["studentId"];
         final teacherId = r["teacherId"];
-        final currentUserId = GetIt.instance.get().user?.id;
+        final auth = GetIt.instance<AuthService>();
+        final currentUserId = auth.user?.id;
 
         // Determine if current user is student or teacher
         final isStudent = currentUserId == studentId;

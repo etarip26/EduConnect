@@ -1105,9 +1105,9 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
             onTap: () => _showApplicationDetailDialog(
               context,
               app,
-              post,
-              teacher,
-              teacherProfile,
+              post as Map<String, dynamic>?,
+              teacher as Map<String, dynamic>?,
+              teacherProfile as Map<String, dynamic>?,
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -1912,7 +1912,7 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                   : () async {
                       setState(() => isProcessing = true);
                       try {
-                        final admin = getIt<AdminService>();
+                        final admin = GetIt.instance<AdminService>();
                         await admin.approveApplication(
                           application['_id'] ?? application['id'],
                           action: 'approve',
@@ -1950,7 +1950,7 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
                   : () async {
                       setState(() => isProcessing = true);
                       try {
-                        final admin = getIt<AdminService>();
+                        final admin = GetIt.instance<AdminService>();
                         await admin.approveApplication(
                           application['_id'] ?? application['id'],
                           action: 'reject',
