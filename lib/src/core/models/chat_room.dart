@@ -3,6 +3,7 @@ class ChatRoom {
   final String matchId;
   final String studentId;
   final String teacherId;
+  final dynamic match; // Could be Map with teacher/student names or just ID
   final DateTime? lastMessageAt;
 
   ChatRoom({
@@ -10,6 +11,7 @@ class ChatRoom {
     required this.matchId,
     required this.studentId,
     required this.teacherId,
+    this.match,
     this.lastMessageAt,
   });
 
@@ -19,6 +21,7 @@ class ChatRoom {
       matchId: json["matchId"] ?? "",
       studentId: json["studentId"] ?? "",
       teacherId: json["teacherId"] ?? "",
+      match: json["matchId"], // Store full match object
       lastMessageAt: json["lastMessageAt"] != null
           ? DateTime.parse(json["lastMessageAt"])
           : null,

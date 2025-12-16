@@ -43,6 +43,12 @@ const TeacherProfileSchema = new mongoose.Schema(
 
     about: { type: String, default: "" },
 
+    // CV (Curriculum Vitae) document
+    cvFileUrl: {
+      type: String,
+      default: null
+    },
+
     // NID (National ID) verification
     nidCardImageUrl: {
       type: String,

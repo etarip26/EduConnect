@@ -5,8 +5,9 @@ import 'package:test_app/src/core/services/auth_service.dart';
 
 class ChatRoomPage extends StatefulWidget {
   final String roomId;
+  final String? partnerName;
 
-  const ChatRoomPage({super.key, required this.roomId});
+  const ChatRoomPage({super.key, required this.roomId, this.partnerName});
 
   @override
   State<ChatRoomPage> createState() => _ChatRoomPageState();
@@ -49,7 +50,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Chat")),
+      appBar: AppBar(title: Text(widget.partnerName ?? "Chat")),
       body: Column(
         children: [
           Expanded(

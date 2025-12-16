@@ -64,6 +64,10 @@ class _ProfileTabState extends State<ProfileTab> {
   // NID
   String? nidCardImageUrl;
 
+  // CV (for teachers)
+  File? cvFile;
+  String? cvFileUrl;
+
   // Profile image (local)
   File? profileImageFile;
   String? profileImageUrl;
@@ -568,6 +572,8 @@ class _ProfileTabState extends State<ProfileTab> {
           field("Available Time", availTimeC),
           field("About", aboutC),
           const SizedBox(height: 16),
+          _cvFileSection(),
+          const SizedBox(height: 16),
           _nidCardSection(),
         ]),
         const SizedBox(height: 20),
@@ -703,6 +709,127 @@ class _ProfileTabState extends State<ProfileTab> {
       "Map picker coming soon - for now, enter coordinates manually",
     );
     // In a real app, you would open flutter_map or google_maps
+  }
+
+  Widget _cvFileSection() {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey.shade300),
+        color: Colors.grey.shade50,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "📄 Curriculum Vitae (CV)",
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 10),
+          if (cvFile != null)
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.indigo.shade50,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.indigo.shade200),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.file_present, color: Colors.indigo.shade600),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      cvFile!.path.split('/').last,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (editMode)
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 18),
+                      onPressed: () => setState(() => cvFile = null),
+                    ),
+                ],
+              ),
+            )
+          else if (cvFileUrl != null && cvFileUrl!.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.green.shade50,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green.shade200),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.verified, color: Colors.green.shade600),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      "CV Uploaded",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.green.shade700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          const SizedBox(height: 10),
+          if (editMode)
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _pickCVFile,
+                    icon: const Icon(Icons.attach_file),
+                    label: const Text("Upload CV"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.indigo,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          else
+            Text(
+              (cvFile != null || (cvFileUrl != null && cvFileUrl!.isNotEmpty))
+                  ? "✅ CV Uploaded"
+                  : "❌ CV Not Uploaded",
+              style: TextStyle(
+                fontSize: 13,
+                color:
+                    (cvFile != null ||
+                        (cvFileUrl != null && cvFileUrl!.isNotEmpty))
+                    ? Colors.green
+                    : Colors.orange,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickCVFile() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      // Can pick image or document
+      final XFile? file = await picker.pickImage(source: ImageSource.gallery);
+
+      if (file != null) {
+        setState(() {
+          cvFile = File(file.path);
+        });
+      }
+    } catch (e) {
+      showSnackBar(context, "Error picking CV: $e", isError: true);
+    }
   }
 
   Widget _nidCardSection() {

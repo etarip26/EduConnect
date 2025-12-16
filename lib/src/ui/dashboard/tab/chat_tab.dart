@@ -49,19 +49,35 @@ class _ChatTabState extends State<ChatTab> {
       itemCount: rooms.length,
       itemBuilder: (_, i) {
         final r = rooms[i];
-        final partner =
-            r["matchId"]?["teacherName"] ??
-            r["matchId"]?["studentName"] ??
-            "Partner";
+        final studentId = r["studentId"];
+        final teacherId = r["teacherId"];
+        final currentUserId = GetIt.instance.get().user?.id;
+
+        // Determine if current user is student or teacher
+        final isStudent = currentUserId == studentId;
+
+        // Get partner's name from match info or use fallback
+        String partnerName = "Chat Partner";
+        if (r["matchId"] is Map) {
+          partnerName = isStudent
+              ? (r["matchId"]["teacherName"] ?? "Teacher")
+              : (r["matchId"]["studentName"] ?? "Student");
+        } else {
+          // Fallback if matchId not populated
+          partnerName = isStudent ? "Teacher" : "Student";
+        }
 
         return ListTile(
-          leading: AppAvatar(name: partner, radius: 20),
-          title: Text(partner),
+          leading: AppAvatar(name: partnerName, radius: 20),
+          title: Text(partnerName),
           subtitle: const Text("Tap to open chat"),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => ChatRoomPage(roomId: r["_id"])),
+              MaterialPageRoute(
+                builder: (_) =>
+                    ChatRoomPage(roomId: r["_id"], partnerName: partnerName),
+              ),
             );
           },
         );
