@@ -372,6 +372,60 @@ exports.acceptApplication = async (req, res) => {
 };
 
 /* --------------------------------------------------
+   STUDENT — REJECT APPLICATION
+   POST /api/tuition-posts/reject/:appId
+   Student can reject individual admin-approved applications
+-------------------------------------------------- */
+exports.rejectApplication = async (req, res) => {
+  try {
+    const { appId } = req.params;
+    const { reason } = req.body;
+
+    const app = await TuitionApplication.findById(appId);
+    if (!app)
+      return res.status(404).json({ message: "Application not found" });
+
+    // Check that application is admin-approved
+    if (app.status !== "admin_approved") {
+      return res.status(400).json({ 
+        message: "Cannot reject application",
+        details: `Application cannot be rejected. Status: ${app.status}`
+      });
+    }
+
+    const post = await TuitionPost.findById(app.postId);
+    if (!post)
+      return res.status(404).json({ message: "Post not found" });
+
+    if (post.studentId.toString() !== req.user._id.toString())
+      return res.status(403).json({ message: "Not authorized" });
+
+    app.status = "student_rejected";
+    app.rejectionReason = reason || null;
+    await app.save();
+
+    // Create notification for teacher
+    const Notification = require("../models/Notification");
+    await Notification.create({
+      userId: app.teacherId,
+      title: "Application Not Selected",
+      message: `Your application for "${post.title}" was not selected. ${reason ? `Feedback: ${reason}` : ''}`,
+      type: "application_rejected_by_student",
+      relatedId: app._id,
+      isRead: false
+    });
+
+    res.json({
+      message: "Application rejected"
+    });
+
+  } catch (err) {
+    console.error("rejectApplication error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+/* --------------------------------------------------
    CLOSE A POST (Student)
 -------------------------------------------------- */
 exports.closePost = async (req, res) => {

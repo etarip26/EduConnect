@@ -9,6 +9,7 @@ const {
   getMyApplications,
   getApplicationsForPost,
   acceptApplication,
+  rejectApplication,
   closePost,
   getMyPosts,
   getApprovedTuitions,
@@ -105,6 +106,18 @@ router.post(
   protect,
   requireRole(["student"]),
   acceptApplication
+);
+
+/* --------------------------------------------------
+   STUDENT — REJECT APPLICATION
+   POST /api/tuition/applications/reject/:appId
+   Body: { reason?: string }
+-------------------------------------------------- */
+router.post(
+  "/applications/reject/:appId",
+  protect,
+  requireRole(["student"]),
+  rejectApplication
 );
 
 /* --------------------------------------------------
