@@ -34,7 +34,7 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
-    
+
     // Refresh data when Approvals tab (index 4) is opened
     _tabController.addListener(() {
       if (_tabController.index == 4 && !loading) {
@@ -42,7 +42,7 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
         loadData();
       }
     });
-    
+
     loadData();
   }
 
@@ -98,7 +98,9 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
       applications = await admin.getApplicationsPending();
       print("Applications loaded: ${applications.length} pending applications");
       for (var app in applications) {
-        print("  - App ${app['_id']}: Teacher ${app['teacherId']?['name']} applied to ${app['postId']?['title']}");
+        print(
+          "  - App ${app['_id']}: Teacher ${app['teacherId']?['name']} applied to ${app['postId']?['title']}",
+        );
       }
     } catch (e) {
       print("Error fetching pending applications: $e");
