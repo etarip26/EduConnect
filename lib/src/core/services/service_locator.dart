@@ -10,6 +10,7 @@ import 'tuition_service.dart';
 import 'chat_service.dart';
 import 'demo_service.dart';
 import 'matches_service.dart';
+import 'review_service.dart';
 import 'search_service.dart';
 import 'notification_service.dart';
 import 'storage_service.dart';
@@ -54,6 +55,11 @@ Future<void> initServices() async {
   // MATCHES SERVICE
   sl.registerLazySingleton<MatchesService>(
     () => MatchesService(apiClient: sl<ApiClient>()),
+  );
+
+  // REVIEW SERVICE
+  sl.registerLazySingleton<ReviewService>(
+    () => ReviewService(apiClient: sl<ApiClient>()),
   );
 
   // SEARCH SERVICE
