@@ -147,7 +147,10 @@ router.patch("/tuition-posts/:postId/reject", rejectTuitionPost); // Reject post
 // --------------------------------------------------
 // TUITION APPLICATION APPROVAL SYSTEM
 // --------------------------------------------------
-router.get("/applications/pending", getPendingApplications); // Get pending applications
+router.get("/applications/pending", (req, res, next) => {
+  console.log("Route /api/admin/applications/pending HIT");
+  next();
+}, getPendingApplications); // Get pending applications
 
 // Legacy endpoints
 router.patch("/teachers/:teacherId/approve", approveTeacherProfile);

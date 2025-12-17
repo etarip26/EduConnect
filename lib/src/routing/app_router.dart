@@ -15,7 +15,7 @@ import '../ui/auth/otp_page.dart';
 import '../ui/dashboard/dashboard_page.dart';
 
 // Admin
-import '../ui/admin/admin_dashboard_page.dart';
+import '../ui/admin/admin_home_page_tabbed.dart';
 
 // Splash
 import '../ui/splash/splash_loading_screen.dart';
@@ -53,7 +53,7 @@ class AppRouter {
             // If admin → go to admin dashboard
             // Otherwise → go to regular dashboard
             if (adminService.isAdmin()) {
-              return const AdminDashboardPage();
+              return const AdminHomePageTabbed();
             }
 
             return const DashboardPage();
@@ -86,7 +86,7 @@ class AppRouter {
 
           case '/admin':
           case '/admin/dashboard':
-            return const AdminDashboardPage();
+            return const AdminHomePageTabbed();
 
           // ---------------- PROFILE ----------------
 

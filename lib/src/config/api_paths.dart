@@ -56,6 +56,7 @@ class ApiPaths {
   static String adminApproveTeacher(String id) => "/admin/profiles/$id/approve";
 
   static const String adminPendingTuitions = "/admin/tuition-posts/pending";
+  static const String adminApplicationsPending = "/admin/applications/pending";
 
   static String adminApproveTuition(String id) =>
       "/admin/tuition-posts/$id/approve";

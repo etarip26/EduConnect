@@ -138,6 +138,7 @@ const approveApplication = async (req, res) => {
 // --------------------------------------------------
 const getPendingApplications = async (req, res) => {
   try {
+    console.log("getPendingApplications called!");
     const applications = await TuitionApplication.find({ status: "pending_admin_review" })
       .populate("postId", "title classLevel subjects salaryMin salaryMax location")
       .populate("teacherId", "name email")
@@ -147,6 +148,8 @@ const getPendingApplications = async (req, res) => {
         model: "User"
       })
       .sort({ createdAt: -1 });
+
+    console.log(`Found ${applications.length} pending applications`);
 
     // Enrich with teacher profile data (CV, NID, etc.)
     const enrichedApps = await Promise.all(
@@ -160,10 +163,11 @@ const getPendingApplications = async (req, res) => {
       })
     );
 
+    console.log(`Returning ${enrichedApps.length} enriched applications`);
     res.json({ applications: enrichedApps });
   } catch (err) {
     console.error("getPendingApplications error:", err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 

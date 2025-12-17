@@ -331,7 +331,7 @@ class AdminService {
   // GET /api/admin/applications/pending
   // ---------------------------------------------------------
   Future<List<dynamic>> getApplicationsPending() async {
-    final res = await api.get('/api/admin/applications/pending');
+    final res = await api.get(ApiPaths.adminApplicationsPending);
     return res['applications'] ?? [];
   }
 }
