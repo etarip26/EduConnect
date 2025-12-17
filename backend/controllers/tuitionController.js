@@ -266,6 +266,8 @@ exports.getMyApplications = async (req, res) => {
 /* --------------------------------------------------
    STUDENT — GET ALL APPLICATIONS FOR A TUITION POST
    GET /api/tuition-posts/:postId/applications
+   Students see only admin-approved applications
+   Admins see all applications for review
 -------------------------------------------------- */
 exports.getApplicationsForPost = async (req, res) => {
   try {
@@ -285,7 +287,14 @@ exports.getApplicationsForPost = async (req, res) => {
     if (!post)
       return res.status(403).json({ message: "Not authorized" });
 
-    const apps = await TuitionApplication.find({ postId })
+    // Students can only see admin-approved applications
+    // Admins can see all applications
+    const query = { postId };
+    if (req.user.role !== "admin") {
+      query.status = "admin_approved";
+    }
+
+    const apps = await TuitionApplication.find(query)
       .populate("teacherId", "name email")
       .sort({ createdAt: -1 });
 
@@ -308,6 +317,7 @@ exports.getApplicationsForPost = async (req, res) => {
 /* --------------------------------------------------
    STUDENT — ACCEPT APPLICATION
    POST /api/tuition-posts/accept/:appId
+   Student can only accept admin-approved applications
 -------------------------------------------------- */
 exports.acceptApplication = async (req, res) => {
   try {
@@ -316,6 +326,14 @@ exports.acceptApplication = async (req, res) => {
     const app = await TuitionApplication.findById(appId);
     if (!app)
       return res.status(404).json({ message: "Application not found" });
+
+    // Check that application is admin-approved
+    if (app.status !== "admin_approved") {
+      return res.status(400).json({ 
+        message: "Cannot accept application",
+        details: `Application is still pending admin review. Status: ${app.status}`
+      });
+    }
 
     const post = await TuitionPost.findById(app.postId);
     if (!post)
