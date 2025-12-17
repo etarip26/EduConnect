@@ -99,19 +99,28 @@ class AppSidebar extends StatelessWidget {
             _sidebarItem(
               context,
               index: 4,
-              label: 'Profile',
-              icon: Icons.person_outline_rounded,
+              label: 'My Matches',
+              icon: Icons.handshake_rounded,
               isActive: currentIndex == 4,
               onTap: () => _navigateTo(context, 4),
+            ),
+          if (!isAdmin)
+            _sidebarItem(
+              context,
+              index: 5,
+              label: 'Profile',
+              icon: Icons.person_outline_rounded,
+              isActive: currentIndex == 5,
+              onTap: () => _navigateTo(context, 5),
             )
           else
             _sidebarItem(
               context,
-              index: 4,
+              index: 5,
               label: 'Admin Panel',
               icon: Icons.admin_panel_settings_rounded,
-              isActive: currentIndex == 4,
-              onTap: () => _navigateTo(context, 4),
+              isActive: currentIndex == 5,
+              onTap: () => _navigateTo(context, 5),
             ),
 
           const Divider(indent: 20, endIndent: 20),

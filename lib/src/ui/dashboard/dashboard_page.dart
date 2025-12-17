@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'tab/home_tab.dart';
 import 'tab/chat_tab.dart';
 import 'tab/tuition_tab.dart';
+import 'tab/my_matches_tab.dart';
 import 'tab/profile_tab.dart';
 import 'tab/search_tab.dart';
 import 'tab/admin_tab.dart'; // NEW
@@ -34,6 +35,7 @@ class _DashboardPageState extends State<DashboardPage>
     const SearchTab(),
     const ChatTab(),
     const TuitionTab(),
+    const MyMatchesTab(), // NEW: My Matches for students
     isAdmin ? const AdminTab() : const ProfileTab(),
   ];
 
@@ -117,12 +119,16 @@ class _DashboardPageState extends State<DashboardPage>
                 navItem(Icons.chat_bubble_rounded, 2),
                 navItem(Icons.book_rounded, 3),
 
+                // STUDENTS: My Matches button
+                if (!isAdmin)
+                  navItem(Icons.handshake_rounded, 4),
+
                 // LAST TAB CHANGES BASED ON ROLE
                 navItem(
                   isAdmin
                       ? Icons.admin_panel_settings_rounded
                       : Icons.person_rounded,
-                  4,
+                  isAdmin ? 4 : 5,
                 ),
               ],
             ),

@@ -62,11 +62,17 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     reverse: true,
                     itemBuilder: (_, i) {
                       final m = messages[messages.length - 1 - i];
-                      final senderIdFromMsg = m["senderId"] ?? m["sender"]?["_id"] ?? m["sender"]?.toString() ?? "";
+                      final senderIdFromMsg =
+                          m["senderId"] ??
+                          m["sender"]?["_id"] ??
+                          m["sender"]?.toString() ??
+                          "";
                       final currentUserId = auth.user?.id ?? "";
                       final isMe = senderIdFromMsg == currentUserId;
 
-                      print("[Chat] Message: sender=$senderIdFromMsg, me=$currentUserId, isMe=$isMe");
+                      print(
+                        "[Chat] Message: sender=$senderIdFromMsg, me=$currentUserId, isMe=$isMe",
+                      );
 
                       return Align(
                         alignment: isMe
@@ -79,7 +85,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             maxWidth: MediaQuery.of(context).size.width * 0.75,
                           ),
                           decoration: BoxDecoration(
-                            color: isMe 
+                            color: isMe
                                 ? Colors.blue.shade600
                                 : Colors.grey.shade400,
                             borderRadius: BorderRadius.circular(12),
