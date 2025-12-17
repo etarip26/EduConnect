@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/src/core/services/tuition_service.dart';
-import 'package:test_app/src/ui/dashboard/widgets/teacher_card.dart';
 import 'package:get_it/get_it.dart';
 
 class AllTeachersPage extends StatefulWidget {
@@ -11,7 +9,6 @@ class AllTeachersPage extends StatefulWidget {
 }
 
 class _AllTeachersPageState extends State<AllTeachersPage> {
-  late TuitionService _tuitionService;
   List<dynamic> teachers = [];
   List<dynamic> filteredTeachers = [];
   bool _isLoading = true;
@@ -21,19 +18,17 @@ class _AllTeachersPageState extends State<AllTeachersPage> {
   @override
   void initState() {
     super.initState();
-    _tuitionService = GetIt.instance<TuitionService>();
     _loadTeachers();
   }
 
   Future<void> _loadTeachers() async {
     try {
       setState(() => _isLoading = true);
-      // Fetch all teachers - you may need to adjust this based on your API
-      final response = await _tuitionService.getTeachers();
-
+      // For now, return empty list - backend doesn't have getTeachers endpoint
+      // In production, fetch from: GET /api/teachers or similar
       setState(() {
-        teachers = response;
-        filteredTeachers = response;
+        teachers = [];
+        filteredTeachers = [];
         _isLoading = false;
         _sortTeachers();
       });

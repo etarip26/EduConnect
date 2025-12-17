@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:test_app/src/core/models/user.dart';
-import 'package:test_app/src/core/providers/user_provider.dart';
 import 'package:test_app/src/core/services/review_service.dart';
-import 'package:test_app/src/core/services/notification_service.dart';
+import 'package:get_it/get_it.dart';
 
 class ReviewsPage extends StatefulWidget {
   final String? teacherId;
@@ -23,7 +20,6 @@ class ReviewsPage extends StatefulWidget {
 
 class _ReviewsPageState extends State<ReviewsPage> {
   late ReviewService _reviewService;
-  late NotificationService _notificationService;
   List<Map<String, dynamic>> reviews = [];
   Map<String, dynamic> ratingStats = {'averageRating': 0.0, 'totalReviews': 0};
   bool _isLoading = true;
@@ -33,8 +29,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
   @override
   void initState() {
     super.initState();
-    _reviewService = ReviewService(apiClient: context.read());
-    _notificationService = NotificationService(apiClient: context.read());
+    _reviewService = ReviewService(apiClient: GetIt.instance());
     _loadReviews();
   }
 
@@ -151,16 +146,6 @@ class _ReviewsPageState extends State<ReviewsPage> {
                     teacherId: widget.teacherId!,
                     rating: rating.toInt(),
                     comment: commentController.text.trim(),
-                  );
-
-                  // Create notification for teacher
-                  await _notificationService.createNotification(
-                    recipientId: widget.teacherId!,
-                    type: 'review',
-                    title: 'New Review Received',
-                    message:
-                        'A student left a ${rating.toInt()}-star review for you',
-                    relatedId: widget.teacherId,
                   );
 
                   Navigator.pop(context);

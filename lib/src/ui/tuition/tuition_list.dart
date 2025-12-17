@@ -117,7 +117,7 @@ class _TuitionListPageState extends State<TuitionListPage> {
                           ],
                         ),
                         onTap: () {
-                          _showEditTuitionDialog(context, tuition);
+                          _showEditTuitionDialog(context, p);
                         },
                       ),
                     if (isOwner)
@@ -130,10 +130,7 @@ class _TuitionListPageState extends State<TuitionListPage> {
                           ],
                         ),
                         onTap: () {
-                          _showDeleteConfirmationDialog(
-                            context,
-                            tuition['_id'],
-                          );
+                          _showDeleteConfirmationDialog(context, p['_id']);
                         },
                       ),
                     if (!isOwner)

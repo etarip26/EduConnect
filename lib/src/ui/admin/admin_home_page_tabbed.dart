@@ -945,20 +945,19 @@ class _AdminHomePageTabbedState extends State<AdminHomePageTabbed>
               ),
               const SizedBox(height: 12),
               _applicationsApprovalsCard(),
-            ] else
-              if (teachers.isEmpty && tuitions.isEmpty)
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.shade50,
-                    border: Border.all(color: Colors.orange.shade200),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'No pending applications yet. Teachers will need to apply to approved tuitions.',
-                    style: TextStyle(color: Colors.orange.shade900),
-                  ),
+            ] else if (teachers.isEmpty && tuitions.isEmpty)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade50,
+                  border: Border.all(color: Colors.orange.shade200),
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                child: Text(
+                  'No pending applications yet. Teachers will need to apply to approved tuitions.',
+                  style: TextStyle(color: Colors.orange.shade900),
+                ),
+              ),
 
             if (teachers.isEmpty && tuitions.isEmpty && applications.isEmpty)
               Container(
